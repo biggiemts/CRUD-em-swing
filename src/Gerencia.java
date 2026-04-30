@@ -12,7 +12,6 @@ public class Gerencia {
         Tarefa t = new Tarefa(nome);
         tarefa.add(t);
         System.out.println("Tarefa adicionada com sucesso");
-
     }
     //mostra
 

@@ -30,6 +30,12 @@ public class Janela extends JFrame{
         painelDestino.add(label);
         return label;
     }
+    private JTextField criarCampo(JPanel painelDestino){
+        JTextField campo = new JTextField(20);
+        campo.setFont(new Font("Arial", Font.BOLD, 18));
+        painelDestino.add(campo);
+        return campo;
+    }
     public void Menu(){
         getContentPane().removeAll();
         JPanel painel = new JPanel();
@@ -59,18 +65,47 @@ public class Janela extends JFrame{
     }
     public void Adicionar(){
         getContentPane().removeAll();
+
         JPanel painel = new JPanel();
+        painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
+
+        JPanel painel2 = new JPanel();
+        JPanel painel3 = new JPanel();
+        JPanel painel4 = new JPanel();
+        JPanel painel5 = new JPanel();
+
 
         setLayout(new FlowLayout());
-        painel.setLayout(new GridLayout(5,2,10,10));
+        painel.setLayout(new GridLayout(4,1,10,10)); //paienl principal
+        painel2.setLayout(new GridLayout(1,2,10,10));//painel do primeiro titulo
+        painel3.setLayout(new GridLayout(1,1,10,10));//painel do campo adiciona tarefa
+        painel4.setLayout(new GridLayout(1,1,10,10)); //painel pra mensagem de exito ao adicionar
+        painel5.setLayout(new GridLayout(1,3,10,10));//painel dos botoes
 
-        criarLabel("Adicionar Tarefa: ", 18, painel);
+        painel4.setVisible(false);
 
-        add(painel, BorderLayout.CENTER);
+        criarLabel(" Adicionar Tarefa: ", 18, painel2);criarLabel(" ",18,painel2);
+        JTextField textoCampo = criarCampo (painel3);
+        criarLabel("Tarefa adicionada com sucesso", 18,painel4);
+        criarBotao("voltar", painel5).addActionListener(e -> Menu());
+        criarLabel(" ",18,painel5);
+        criarBotao("Adicionar Tarefa", painel5).addActionListener(e -> {
+                    g.adiciona(textoCampo.getText());
+                    textoCampo.setText(" ");
+                    painel4.setVisible(true);
+
+                    revalidate();
+                    repaint();
+        });
+
+        painel.add(painel2);
+        painel.add(painel3);
+        painel.add(painel4);
+        painel.add(painel5);
+        add(painel);
 
         revalidate();
         repaint();
-
     }
     public void Mostrar(){
         getContentPane().removeAll();

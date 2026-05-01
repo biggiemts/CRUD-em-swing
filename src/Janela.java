@@ -4,6 +4,7 @@ import java.awt.*;
 
 public class Janela extends JFrame{
     Gerencia g = new Gerencia();
+    ControlaTarefa ct = new ControlaTarefa();
 
 
     public Janela()  {
@@ -14,46 +15,24 @@ public class Janela extends JFrame{
 
         Menu();
     }
-    private JButton criarBotao(String texto, JPanel painelDestino){
-        JButton botao = new JButton(texto);
-
-        botao.setFocusPainted(false);
-        botao.setFont(new Font("Arial", Font.BOLD, 18));
-
-        // em ves de criar na janela ele cria no painel e manda pra la
-        painelDestino.add(botao);
-        return botao;
-    }
-    private JLabel criarLabel(String texto, int tamanhoFonte, JPanel painelDestino){
-        JLabel label = new JLabel(texto);
-        label.setFont(new Font("Arial", Font.BOLD, tamanhoFonte));
-        painelDestino.add(label);
-        return label;
-    }
-    private JTextField criarCampo(JPanel painelDestino){
-        JTextField campo = new JTextField(20);
-        campo.setFont(new Font("Arial", Font.BOLD, 18));
-        painelDestino.add(campo);
-        return campo;
-    }
     public void Menu(){
         getContentPane().removeAll();
         JPanel painel = new JPanel();
 
-        //organiza e nao deixa ocupar todo o espaço
+        //organiza e nao deixa ocupar
         setLayout(new FlowLayout());
 
         //seta o tanto de linhas colunas e mais umas duas paradas
         painel.setLayout(new GridLayout(7,1,10,10));
 
         //crio o botao dentro do panel para que o java organize sozinho
-        criarLabel("\n-- Sua lista de Tarefas --", 25, painel);
-        criarBotao("Adicionar Tarefa", painel).addActionListener(e -> Adicionar());
-        criarBotao("mostrar Tarefas", painel).addActionListener( e -> Mostrar());
-        criarBotao("Editar Tarefa", painel).addActionListener(e ->Edita());
-        criarBotao("Concluir Tarefa", painel).addActionListener( e -> ConcluirTarefa());
-        criarBotao("Deletar Tarefa", painel).addActionListener(e -> Deletar());
-        criarBotao("sair", painel).addActionListener(e -> Sair());
+        ct.criarLabel("\n-- Sua lista de Tarefas --", 25, painel);
+        ct.criarBotao("Adicionar Tarefa", painel).addActionListener(e -> Adicionar());
+        ct.criarBotao("mostrar Tarefas", painel).addActionListener( e -> Mostrar());
+        ct.criarBotao("Editar Tarefa", painel).addActionListener(e ->Edita());
+        ct.criarBotao("Concluir Tarefa", painel).addActionListener( e -> ConcluirTarefa());
+        ct.criarBotao("Deletar Tarefa", painel).addActionListener(e -> Deletar());
+        ct.criarBotao("sair", painel).addActionListener(e -> Sair());
 
 
         // adiciono o painel e coloco aonde ele vai se situar
@@ -66,43 +45,39 @@ public class Janela extends JFrame{
     public void Adicionar(){
         getContentPane().removeAll();
 
-        JPanel painel = new JPanel();
-        painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
-
-        JPanel painel2 = new JPanel();
-        JPanel painel3 = new JPanel();
-        JPanel painel4 = new JPanel();
-        JPanel painel5 = new JPanel();
-
+        JPanel painelPrincipal = new JPanel();
+        JPanel pTitulo = new JPanel();
+        JPanel pCampo = new JPanel();
+        JPanel pMensagem = new JPanel();
+        JPanel pBotoes = new JPanel();
 
         setLayout(new FlowLayout());
-        painel.setLayout(new GridLayout(4,1,10,10)); //paienl principal
-        painel2.setLayout(new GridLayout(1,2,10,10));//painel do primeiro titulo
-        painel3.setLayout(new GridLayout(1,1,10,10));//painel do campo adiciona tarefa
-        painel4.setLayout(new GridLayout(1,1,10,10)); //painel pra mensagem de exito ao adicionar
-        painel5.setLayout(new GridLayout(1,3,10,10));//painel dos botoes
+        painelPrincipal.setLayout(new GridLayout(4,1,10,10)); //paienl principal
+        pTitulo.setLayout(new GridLayout(1,2,10,10));//painel do primeiro titulo
+        pCampo.setLayout(new GridLayout(1,1,10,10));//painel do campo adiciona tarefa
+        pMensagem.setLayout(new GridLayout(1,1,10,10)); //painel pra mensagem de exito ao adicionar
+        pBotoes.setLayout(new GridLayout(1,3,10,10));//painel dos botoes
 
-        painel4.setVisible(false);
+        pMensagem.setVisible(false);
 
-        criarLabel(" Adicionar Tarefa: ", 18, painel2);criarLabel(" ",18,painel2);
-        JTextField textoCampo = criarCampo (painel3);
-        criarLabel("Tarefa adicionada com sucesso", 18,painel4);
-        criarBotao("voltar", painel5).addActionListener(e -> Menu());
-        criarLabel(" ",18,painel5);
-        criarBotao("Adicionar Tarefa", painel5).addActionListener(e -> {
-                    g.adiciona(textoCampo.getText());
-                    textoCampo.setText(" ");
-                    painel4.setVisible(true);
 
-                    revalidate();
-                    repaint();
+
+        ct.criarLabel(" Adicionar Tarefa: ", 18, pTitulo);ct.criarLabel(" ",18,pTitulo);
+        JLabel label = ct.criarLabel("", 18,pMensagem);
+        JTextField texto = ct.criarCampo(pCampo);
+        ct.criarBotao("voltar", pBotoes).addActionListener(e -> Menu());
+        ct.criarLabel(" ",18,pBotoes);
+        ct.criarBotao("Adicionar Tarefa", pBotoes).addActionListener(e -> {
+
+
+           //ct.botaoAdiciona();
         });
 
-        painel.add(painel2);
-        painel.add(painel3);
-        painel.add(painel4);
-        painel.add(painel5);
-        add(painel);
+        painelPrincipal.add(pTitulo);
+        painelPrincipal.add(pCampo);
+        painelPrincipal.add(pMensagem);
+        painelPrincipal.add(pBotoes);
+        add(painelPrincipal);
 
         revalidate();
         repaint();

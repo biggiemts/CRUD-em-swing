@@ -25,21 +25,52 @@ public class ControlaTarefa {
         painelDestino.add(campo);
         return campo;
     }
-    public void botaoAdiciona(JTextField campo, JLabel titulo, JPanel painelDestino){
+    public JTextArea criarCampoArea(JPanel painelDestino){
+        String texto = "";
+
+        texto = g.mostraTarefa(texto);
+
+        JTextArea tArea = new JTextArea();
+        tArea.setEditable(false);
+        tArea.setLineWrap(true);
+        tArea.setWrapStyleWord(true);
+        tArea.setFont(new Font("Arial",Font.BOLD,12));
+        tArea.setEditable(false);
+
+        if(g.temTarefa()) {
+            tArea.setText("\n -- Suas Tarefas -- \n\n");
+            tArea.setText(texto);
+        } else {
+                tArea.setText("\n\n\n NÃO HÁ NENHUMA TAREFA!!! ");
+        }
+        painelDestino.add(tArea);
+        tArea.setVisible(true);
+
+        return tArea;
+    }
+
+    public void botaoAdiciona(JTextField campo, JLabel titulo, JPanel painelDestino, JPanel painelMensagem){
         String texto = campo.getText().trim();
+        System.out.println("\n\nbotao adicionar - controlatarefa - acionado com sucesso");
 
         if (!texto.isEmpty()){
             g.adiciona(texto);
             campo.setText("");
             titulo.setText("Tarefa Adicionada com sucesso!");
             titulo.setForeground(Color.GREEN);
+            painelMensagem.setVisible(true);
+
 
             painelDestino.repaint();
             painelDestino.revalidate();
+            System.out.println("\n\ntem algo no campo");
         } else{
             campo.setText("");
             titulo.setText("Erro ao adicionar Tarefa!");
             titulo.setForeground(Color.RED);
+
+            painelMensagem.setVisible(true);
+            System.out.println("\n\nnao tem nada no campo");
             painelDestino.repaint();
             painelDestino.revalidate();
         }

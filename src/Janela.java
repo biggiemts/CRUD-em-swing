@@ -1,11 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
 
-
 public class Janela extends JFrame{
     Gerencia g = new Gerencia();
     ControlaTarefa ct = new ControlaTarefa();
-
 
     public Janela()  {
         setTitle("Lista de Tarefas");
@@ -34,13 +32,11 @@ public class Janela extends JFrame{
         ct.criarBotao("Deletar Tarefa", painel).addActionListener(e -> Deletar());
         ct.criarBotao("sair", painel).addActionListener(e -> Sair());
 
-
         // adiciono o painel e coloco aonde ele vai se situar
-        add(painel, BorderLayout.CENTER);
+        add(painel);
 
         revalidate();
         repaint();
-
     }
     public void Adicionar(){
         getContentPane().removeAll();
@@ -50,33 +46,34 @@ public class Janela extends JFrame{
         JPanel pCampo = new JPanel();
         JPanel pMensagem = new JPanel();
         JPanel pBotoes = new JPanel();
+        JPanel pbotaoMostrar = new JPanel();
 
-        setLayout(new FlowLayout());
-        painelPrincipal.setLayout(new GridLayout(4,1,10,10)); //paienl principal
+        painelPrincipal.setLayout(new GridLayout(5,1,10,10)); //paienl principal
         pTitulo.setLayout(new GridLayout(1,2,10,10));//painel do primeiro titulo
         pCampo.setLayout(new GridLayout(1,1,10,10));//painel do campo adiciona tarefa
         pMensagem.setLayout(new GridLayout(1,1,10,10)); //painel pra mensagem de exito ao adicionar
         pBotoes.setLayout(new GridLayout(1,3,10,10));//painel dos botoes
+        pbotaoMostrar.setLayout(new GridLayout(1,3,10,10));
 
         pMensagem.setVisible(false);
-
-
 
         ct.criarLabel(" Adicionar Tarefa: ", 18, pTitulo);ct.criarLabel(" ",18,pTitulo);
         JLabel label = ct.criarLabel("", 18,pMensagem);
         JTextField texto = ct.criarCampo(pCampo);
         ct.criarBotao("voltar", pBotoes).addActionListener(e -> Menu());
         ct.criarLabel(" ",18,pBotoes);
-        ct.criarBotao("Adicionar Tarefa", pBotoes).addActionListener(e -> {
-
-
-           //ct.botaoAdiciona();
-        });
+        ct.criarBotao("Adicionar Tarefa", pBotoes).addActionListener(e ->
+                ct.botaoAdiciona(texto, label, painelPrincipal, pMensagem)
+        );
+        ct.criarLabel(" ",18,pbotaoMostrar);
+        ct.criarBotao("mostrar Tarefas", pbotaoMostrar).addActionListener(e -> Mostrar());
+        ct.criarLabel(" ",18,pbotaoMostrar);
 
         painelPrincipal.add(pTitulo);
         painelPrincipal.add(pCampo);
         painelPrincipal.add(pMensagem);
         painelPrincipal.add(pBotoes);
+        painelPrincipal.add(pbotaoMostrar);
         add(painelPrincipal);
 
         revalidate();
@@ -85,52 +82,28 @@ public class Janela extends JFrame{
     public void Mostrar(){
         getContentPane().removeAll();
 
-
-        //botao volta e configs
-        JButton voltar = new JButton("Voltar");
-        voltar.setFont(new Font("Arial",Font.BOLD,14));
-
-        voltar.setFocusPainted(false);
-        voltar.addActionListener(e ->Menu());
-
-        //if verifica e printa na tela as tarefas
-        if(!g.temTarefa()){
-            // exibe se nao houver tarefas
-            JLabel titulo = new JLabel("Não há nenhuma Tarefa!!!");
-            titulo.setFont(new Font("Arial",Font.BOLD,20));
-            titulo.setForeground(Color.RED);
-            titulo.setBounds(150,100,300,30);
-            add(titulo);
-            voltar.setBounds(150,140,150,30);
-            add(voltar);
-        } else{
-            //exibe tarefas exitentes
-            JTextArea texto = new JTextArea();
-            texto.setEditable(false);
-            texto.setLineWrap(true);
-            texto.setWrapStyleWord(true);
-            texto.setBounds(150,50,300,400);
-            texto.setFont(new Font("Arial",Font.BOLD,12));
-            texto.setEditable(false);
-
-            //chama o for da gerencia
-            String textoFinal = "--- Suas Tarefas ---\n\n";
-            String resultado = g.mostraTarefa(textoFinal);
-
-            texto.setText(resultado);
+        JPanel painelPrincipal = new JPanel( new BorderLayout(10,10));
+        JPanel pTArea = new JPanel();
+        JPanel pBotoes = new JPanel();
+        JTextArea areaTexto = ct.criarCampoArea(pTArea);
 
 
-            add(texto);
-            voltar.setBounds(150,500,150,30);
-            add(voltar);
+        pTArea.setLayout(new GridLayout(1,1));
+        pBotoes.setLayout(new GridLayout(1,3));
+        areaTexto.setPreferredSize(new Dimension(400,400));
 
-            revalidate();
-            repaint();
+        ct.criarBotao("Voltar",  pBotoes).addActionListener(e -> Menu());
+        ct.criarLabel(" ",18,pBotoes);
+        ct.criarBotao("adicionar Tarefa", pBotoes).addActionListener(e -> Adicionar());
 
-        }
-        revalidate();
+
+        painelPrincipal.add(pTArea, BorderLayout.CENTER);
+        painelPrincipal.add(pBotoes, BorderLayout.SOUTH);
+        add(painelPrincipal);
+
+
         repaint();
-        setVisible(true);
+        revalidate();
     }
     public void Edita(){
         getContentPane().removeAll();
@@ -277,7 +250,7 @@ public class Janela extends JFrame{
         revalidate();
         repaint();
         setVisible(true);
-    }
+    }ss
     public void ConcluirTarefa(){
 
     }

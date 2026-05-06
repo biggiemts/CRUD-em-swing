@@ -117,7 +117,7 @@ public class Janela extends JFrame{
         JPanel pInvisivel =  new JPanel(new FlowLayout());ct.criarLabel(" ",18,pInvisivel);
 
         ct.criarLabel("",20,pErro);
-        ct.criarLabel("Não há nenhuma Tarefa!!!",20,pErro);
+        ct.criarLabel("   Não há nenhuma Tarefa!!!",20,pErro);
         ct.criarLabel("",20,pErro);
         ct.criarLabel(" ",18,pbotao);
         ct.criarBotao("Voltar",pbotao).addActionListener(e-> Menu());
@@ -125,11 +125,51 @@ public class Janela extends JFrame{
         ct.criarBotao("Adicionar Tarefa", pbotao).addActionListener(e -> Adicionar());
         ct.criarLabel(" ",18,pbotao);
 
-        painelErroPrincipal.add(pErro, BorderLayout.NORTH);
-        painelErroPrincipal.add(pbotao,  BorderLayout.CENTER);
+        // tela edita
+        JPanel painelEditaPrincipal = new JPanel(new BorderLayout(10,10));
+        JPanel pEditaPrincipal = new JPanel(new GridLayout(1,2));
+        JPanel pTextarea = new JPanel(new GridLayout(1,1));
+        JPanel pCampos = new JPanel(new GridLayout(6,3));
 
+        JTextArea areaTexto = ct.criarCampoArea(pTextarea);
+        areaTexto.setPreferredSize(new Dimension(200,200));
+
+        //gambiarra pra deixar o view mais "olhavel" quando rodar. Afinal quero ser back, entao gambiarra no front = nao é problema meu
+
+        //1 linha
+        ct.criarLabel("Qual tarefa deseja editar? ", 18, pCampos);ct.criarLabel(" ",18,pCampos);ct.criarLabel(" ",18,pCampos);
+        //2 linha
+        JTextField campoTarefaVelha = ct.criarCampo(pCampos);ct.criarLabel(" ",18,pCampos);ct.criarLabel(" ",18,pCampos);
+        //3 linha
+        ct.criarLabel("Digite a nova tarefa:",18,pCampos);ct.criarLabel(" ",18,pCampos);ct.criarLabel(" ",18,pCampos);
+        //4 linha
+        JTextField campoTarefaNova = ct.criarCampo(pCampos);ct.criarLabel(" ",18,pCampos);ct.criarLabel(" ",18,pCampos);
+        //5 linha
+        JLabel titutoAvar = ct.criarLabel(" ",18,pCampos);
+        //6 linha
+        ct.criarBotao("Voltar", pCampos).addActionListener(e -> Menu()); ct.criarLabel(" ",18,pCampos);
+        ct.criarBotao("confirmar mudanças", pCampos).addActionListener(e ->Menu());
+
+        // levando pra logica
+        ct.botaoEditar(campoTarefaVelha,campoTarefaNova,titutoAvar, pCampos);
+
+        // if dos painel
+        painelEditaPrincipal.setVisible(true);
+        painelErroPrincipal.setVisible(false);
+
+        //add painel para editar
+        painelEditaPrincipal.add(pEditaPrincipal, BorderLayout.NORTH);
+        painelEditaPrincipal.add(pTextarea, BorderLayout.CENTER);
+        painelEditaPrincipal.add(pCampos, BorderLayout.SOUTH);
+
+        // add painel erro, sem tarefa
+        painelErroPrincipal.add(pErro, BorderLayout.NORTH);
+        painelErroPrincipal.add(pbotao,  BorderLayout.SOUTH);
+
+        // add painel principal
         painelprincipal.add(pInvisivel,BorderLayout.NORTH);
         painelprincipal.add(painelErroPrincipal, BorderLayout.CENTER);
+        painelprincipal.add(painelEditaPrincipal, BorderLayout.CENTER);
 
         add(painelprincipal, BorderLayout.CENTER);
 

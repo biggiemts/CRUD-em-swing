@@ -80,6 +80,32 @@ public class ControlaTarefa {
         }
     }
 
+    public void botaoEditar (JTextField campoVelha, JTextField campoNova, JLabel titulo, JPanel painelDestino) {
+        String textoVelha = campoVelha.getText().trim();
+        String textoNova = campoNova.getText().trim();
+
+        int intVelha;
+        intVelha = Integer.parseInt(textoVelha);
+        try {
+
+            System.out.println("try funcionando ");
+            if (intVelha > 0 && intVelha <g.tarefa.size()){
+                System.out.println(" if botao editar funcionado ");
+            }else {
+                titulo.setText("Erro ao adicionar Tarefa!");
+            }
+        } catch (Exception e){
+            titulo.setText("Digite apenas números no primeiro campo!!!");
+            campoVelha.setText("");
+            campoNova.setText("");
+            titulo.setForeground(Color.RED);
+            painelDestino.repaint();
+            painelDestino.revalidate();
+            System.out.println(" catch funcionando");
+        }
+
+    }
+
     public void Botaoeditar() {
 
     }

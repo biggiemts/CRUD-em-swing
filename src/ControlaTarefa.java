@@ -80,22 +80,40 @@ public class ControlaTarefa {
         }
     }
 
-    public void botaoEditar (JTextField campoVelha, JTextField campoNova, JLabel titulo, JPanel painelDestino) {
+    public void botaoEditar (JTextField campoVelha, JTextField campoNova, JLabel titulo, JPanel painelDestino, JTextArea campoArea) {
         String textoVelha = campoVelha.getText().trim();
         String textoNova = campoNova.getText().trim();
 
         int intVelha;
-        intVelha = Integer.parseInt(textoVelha);
-        try {
 
+        try {
+            intVelha = Integer.parseInt(textoVelha);
             System.out.println("try funcionando ");
-            if (intVelha > 0 && intVelha <g.tarefa.size()){
-                System.out.println(" if botao editar funcionado ");
+
+            if (!textoNova.isEmpty() && !textoVelha.isEmpty()) {
+                System.out.println("if empty");
+
+                if (intVelha > 0 && intVelha <= g.tarefa.size()) {
+                    System.out.println(" if botao editar funcionado ");
+                    g.editarTarefa(intVelha, textoNova);
+
+                    titulo.setText("Tarefa Editada com sucesso!");
+                    campoVelha.setText("");
+                    campoNova.setText("");
+                    campoArea.setText(g.mostraTarefa(""));
+
+                }else{
+                    titulo.setText("Erro ao editar Tarefa!");
+                    campoVelha.setText("");
+                    campoNova.setText("");
+                }
             }else {
-                titulo.setText("Erro ao adicionar Tarefa!");
+                System.out.println("else empty");
             }
+            painelDestino.repaint();
+            painelDestino.revalidate();
         } catch (Exception e){
-            titulo.setText("Digite apenas números no primeiro campo!!!");
+            titulo.setText("Erro ao editar!"); 
             campoVelha.setText("");
             campoNova.setText("");
             titulo.setForeground(Color.RED);

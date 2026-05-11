@@ -7,8 +7,9 @@ public class Janela extends JFrame{
     public Janela()  {
         setTitle("Lista de Tarefas");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600,600);
+        setSize(1000,700);
         setLocationRelativeTo(null);
+        setResizable(false);
 
         Menu();
     }
@@ -134,24 +135,27 @@ public class Janela extends JFrame{
         JTextArea areaTexto = ct.criarCampoArea(pTextarea);
         areaTexto.setPreferredSize(new Dimension(200,200));
 
-        //gambiarra pra deixar o view mais "olhavel" quando rodar. Afinal quero ser back, entao gambiarra no front = nao é problema meu
+        //gambiarra pra deixar o view mais "olhavel" quando rodar. Afinal, quero ser back, entao gambiarra no front = nao é problema meu
 
         //1 linha
         ct.criarLabel("Qual tarefa deseja editar? ", 18, pCampos);ct.criarLabel(" ",18,pCampos);ct.criarLabel(" ",18,pCampos);
         //2 linha
-        JTextField campoTarefaVelha = ct.criarCampo(pCampos);ct.criarLabel(" ",18,pCampos);ct.criarLabel(" ",18,pCampos);
+        JTextField campoTarefaVelha = ct.criarCampo(pCampos);ct.criarLabel("",18,pCampos);ct.criarLabel(" ",18,pCampos);
         //3 linha
         ct.criarLabel("Digite a nova tarefa:",18,pCampos);ct.criarLabel(" ",18,pCampos);ct.criarLabel(" ",18,pCampos);
         //4 linha
         JTextField campoTarefaNova = ct.criarCampo(pCampos);ct.criarLabel(" ",18,pCampos);ct.criarLabel(" ",18,pCampos);
         //5 linha
-        JLabel titutoAvar = ct.criarLabel(" ",18,pCampos);
+        JLabel titutoAvar = ct.criarLabel(" ",18,pCampos);ct.criarLabel(" ",18,pCampos);ct.criarLabel(" ",18,pCampos);
         //6 linha
         ct.criarBotao("Voltar", pCampos).addActionListener(e -> Menu()); ct.criarLabel(" ",18,pCampos);
-        ct.criarBotao("confirmar mudanças", pCampos).addActionListener(e ->Menu());
+        ct.criarBotao("confirmar mudanças", pCampos).addActionListener(e ->{
+            ct.botaoEditar(campoTarefaVelha,campoTarefaNova,titutoAvar, pCampos, areaTexto);
 
-        // levando pra logica
-        ct.botaoEditar(campoTarefaVelha,campoTarefaNova,titutoAvar, pCampos);
+        });
+
+
+
 
         // if dos painel
         painelEditaPrincipal.setVisible(true);

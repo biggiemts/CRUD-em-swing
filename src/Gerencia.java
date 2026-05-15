@@ -12,7 +12,6 @@ public class Gerencia {
         Tarefa t = new Tarefa(nome);
         tarefa.add(t);
         System.out.println("Tarefa adicionada com sucesso");
-
     }
     //mostra
 
@@ -25,6 +24,11 @@ public class Gerencia {
         return textoFinal;
     }
 
+    public void editarTarefa(int tarefaVelha, String tarefaNova){
+        Tarefa tarefaAtualizada = new Tarefa(tarefaNova);
+        tarefa.set(tarefaVelha - 1, tarefaAtualizada);
+        System.out.println("Tarefa atualizada com sucesso, metodo ");
+    }
 
 
     //modifica

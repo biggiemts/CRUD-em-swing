@@ -1,272 +1,174 @@
 import javax.swing.*;
 import java.awt.*;
 
-
 public class Janela extends JFrame{
-    Gerencia g = new Gerencia();
-
+    ControlaTarefa ct = new ControlaTarefa();
 
     public Janela()  {
         setTitle("Lista de Tarefas");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600,600);
+        setSize(1000,700);
         setLocationRelativeTo(null);
+        setResizable(false);
 
         Menu();
-    }
-    private JButton criarBotao(String texto, JPanel painelDestino){
-        JButton botao = new JButton(texto);
-
-        botao.setFocusPainted(false);
-        botao.setFont(new Font("Arial", Font.BOLD, 18));
-
-        // em ves de criar na janela ele cria no painel e manda pra la
-        painelDestino.add(botao);
-        return botao;
-    }
-    private JLabel criarLabel(String texto, int tamanhoFonte, JPanel painelDestino){
-        JLabel label = new JLabel(texto);
-        label.setFont(new Font("Arial", Font.BOLD, tamanhoFonte));
-        painelDestino.add(label);
-        return label;
     }
     public void Menu(){
         getContentPane().removeAll();
         JPanel painel = new JPanel();
 
-        //organiza e nao deixa ocupar todo o espaço
+        //organiza e nao deixa ocupar
         setLayout(new FlowLayout());
 
         //seta o tanto de linhas colunas e mais umas duas paradas
         painel.setLayout(new GridLayout(7,1,10,10));
 
         //crio o botao dentro do panel para que o java organize sozinho
-        criarLabel("\n-- Sua lista de Tarefas --", 25, painel);
-        criarBotao("Adicionar Tarefa", painel).addActionListener(e -> Adicionar());
-        criarBotao("mostrar Tarefas", painel).addActionListener( e -> Mostrar());
-        criarBotao("Editar Tarefa", painel).addActionListener(e ->Edita());
-        criarBotao("Concluir Tarefa", painel).addActionListener( e -> ConcluirTarefa());
-        criarBotao("Deletar Tarefa", painel).addActionListener(e -> Deletar());
-        criarBotao("sair", painel).addActionListener(e -> Sair());
-
+        ct.criarLabel("\n-- Sua lista de Tarefas --", 25, painel);
+        ct.criarBotao("Adicionar Tarefa", painel).addActionListener(e -> Adicionar());
+        ct.criarBotao("mostrar Tarefas", painel).addActionListener( e -> Mostrar());
+        ct.criarBotao("Editar Tarefa", painel).addActionListener(e ->Editar());
+        ct.criarBotao("Concluir Tarefa", painel).addActionListener( e -> ConcluirTarefa());
+        ct.criarBotao("Deletar Tarefa", painel).addActionListener(e -> Deletar());
+        ct.criarBotao("sair", painel).addActionListener(e -> Sair());
 
         // adiciono o painel e coloco aonde ele vai se situar
-        add(painel, BorderLayout.CENTER);
+        add(painel);
 
         revalidate();
         repaint();
-
     }
     public void Adicionar(){
         getContentPane().removeAll();
-        JPanel painel = new JPanel();
 
-        setLayout(new FlowLayout());
-        painel.setLayout(new GridLayout(5,2,10,10));
+        JPanel painelPrincipal = new JPanel();
+        JPanel pTitulo = new JPanel();
+        JPanel pCampo = new JPanel();
+        JPanel pMensagem = new JPanel();
+        JPanel pBotoes = new JPanel();
+        JPanel pbotaoMostrar = new JPanel();
 
-        criarLabel("Adicionar Tarefa: ", 18, painel);
+        painelPrincipal.setLayout(new GridLayout(5,1,10,10)); //paienl principal
+        pTitulo.setLayout(new GridLayout(1,2,10,10));//painel do primeiro titulo
+        pCampo.setLayout(new GridLayout(1,1,10,10));//painel do campo adiciona tarefa
+        pMensagem.setLayout(new GridLayout(1,1,10,10)); //painel pra mensagem de exito ao adicionar
+        pBotoes.setLayout(new GridLayout(1,3,10,10));//painel dos botoes
+        pbotaoMostrar.setLayout(new GridLayout(1,3,10,10));
 
-        add(painel, BorderLayout.CENTER);
+        pMensagem.setVisible(false);
+
+        ct.criarLabel(" Adicionar Tarefa: ", 18, pTitulo);ct.criarLabel(" ",18,pTitulo);
+        JLabel label = ct.criarLabel("", 18,pMensagem);
+        JTextField texto = ct.criarCampo(pCampo);
+        ct.criarBotao("voltar", pBotoes).addActionListener(e -> Menu());
+        ct.criarLabel(" ",18,pBotoes);
+        ct.criarBotao("Adicionar Tarefa", pBotoes).addActionListener(e ->
+                ct.botaoAdiciona(texto, label, painelPrincipal, pMensagem)
+        );
+        ct.criarLabel(" ",18,pbotaoMostrar);
+        ct.criarBotao("mostrar Tarefas", pbotaoMostrar).addActionListener(e -> Mostrar());
+        ct.criarLabel(" ",18,pbotaoMostrar);
+
+        painelPrincipal.add(pTitulo);
+        painelPrincipal.add(pCampo);
+        painelPrincipal.add(pMensagem);
+        painelPrincipal.add(pBotoes);
+        painelPrincipal.add(pbotaoMostrar);
+        add(painelPrincipal);
 
         revalidate();
         repaint();
-
     }
     public void Mostrar(){
         getContentPane().removeAll();
 
-
-        //botao volta e configs
-        JButton voltar = new JButton("Voltar");
-        voltar.setFont(new Font("Arial",Font.BOLD,14));
-
-        voltar.setFocusPainted(false);
-        voltar.addActionListener(e ->Menu());
-
-        //if verifica e printa na tela as tarefas
-        if(!g.temTarefa()){
-            // exibe se nao houver tarefas
-            JLabel titulo = new JLabel("Não há nenhuma Tarefa!!!");
-            titulo.setFont(new Font("Arial",Font.BOLD,20));
-            titulo.setForeground(Color.RED);
-            titulo.setBounds(150,100,300,30);
-            add(titulo);
-            voltar.setBounds(150,140,150,30);
-            add(voltar);
-        } else{
-            //exibe tarefas exitentes
-            JTextArea texto = new JTextArea();
-            texto.setEditable(false);
-            texto.setLineWrap(true);
-            texto.setWrapStyleWord(true);
-            texto.setBounds(150,50,300,400);
-            texto.setFont(new Font("Arial",Font.BOLD,12));
-            texto.setEditable(false);
-
-            //chama o for da gerencia
-            String textoFinal = "--- Suas Tarefas ---\n\n";
-            String resultado = g.mostraTarefa(textoFinal);
-
-            texto.setText(resultado);
+        JPanel painelPrincipal = new JPanel( new BorderLayout(10,10));
+        JPanel pTArea = new JPanel();
+        JPanel pBotoes = new JPanel();
+        JTextArea areaTexto = ct.criarCampoArea(pTArea);
 
 
-            add(texto);
-            voltar.setBounds(150,500,150,30);
-            add(voltar);
+        pTArea.setLayout(new GridLayout(1,1));
+        pBotoes.setLayout(new GridLayout(1,3));
+        areaTexto.setPreferredSize(new Dimension(400,400));
 
-            revalidate();
-            repaint();
+        ct.criarBotao("Voltar",  pBotoes).addActionListener(e -> Menu());
+        ct.criarLabel(" ",18,pBotoes);
+        ct.criarBotao("adicionar Tarefa", pBotoes).addActionListener(e -> Adicionar());
 
-        }
-        revalidate();
+
+        painelPrincipal.add(pTArea, BorderLayout.CENTER);
+        painelPrincipal.add(pBotoes, BorderLayout.SOUTH);
+        add(painelPrincipal);
+
+
         repaint();
-        setVisible(true);
+        revalidate();
     }
-    public void Edita(){
-        getContentPane().removeAll();
+    public void Editar(){
+            getContentPane().removeAll();
 
-
-        JButton voltar = new JButton("Voltar");
-        voltar.setFont(new Font("Arial",Font.BOLD,14));
-
-        voltar.setFocusPainted(false);
-        voltar.addActionListener(e ->Menu());
-
-        if(!g.temTarefa()){
-            //cria
-            JLabel titulo = new JLabel("Não há nenhuma Tarefa!!!");
-
-            //edita
-            titulo.setFont(new Font("Arial",Font.BOLD,20));
-            titulo.setForeground(Color.RED);
-
-            //localilção
-            titulo.setBounds(150,100,300,30);
-            voltar.setBounds(150,140,150,30);
-
-            //add
-            add(titulo);
-            add(voltar);
-        } else{
-            //cria
-            JLabel tituloTarefaModificada = new JLabel("");
-            JTextArea texto = new JTextArea();
-            JButton botaoConfirmar = new JButton("Confirmar");
-            JLabel titulo = new JLabel("Digite sua nova tarefa: ");
-            JLabel titulo1 = new JLabel("Qual Tarefa deseja modificar? ");
-            JLabel titulo2 = new JLabel("*SÓ NÚMEROS*");
-            JTextField campoTarefaVelha = new JTextField();
-            JTextField campoTarefaNova = new JTextField();
-
-
-            //edita
-            tituloTarefaModificada.setFont(new Font("Arial",Font.BOLD,16));
-
-            texto.setEditable(false);
-            texto.setLineWrap(true);
-            texto.setWrapStyleWord(true);
-            texto.setFont(new Font("Arial",Font.BOLD,12));
-            texto.setEditable(false);
-
-            titulo.setFont(new Font("Arial",Font.BOLD,14));
-            titulo1.setFont(new Font("Arial",Font.BOLD,14));
-            titulo2.setFont(new Font("Arial",Font.BOLD,14));
-
-            botaoConfirmar.setFont(new Font("Arial",Font.BOLD,14));
-
-
-            //localização e tamnho
-            texto.setBounds(100,30,200,450);
-            titulo2.setBounds(310,50,300,30);
-            titulo1.setBounds(310,35,300,30);
-            titulo.setBounds(310,115,300,30);
-            campoTarefaVelha.setBounds(310,80,60,30);
-            campoTarefaNova.setBounds(310,145,230,30);
-            voltar.setBounds(100,500,200,30);
-            botaoConfirmar.setBounds(310,500,195,30);
-            tituloTarefaModificada.setBounds(310,185,250,50);
+            JPanel painelprincipal = new JPanel( new BorderLayout(10,10));
+            JPanel pInvisivel =  new JPanel(new FlowLayout());ct.criarLabel(" ",18,pInvisivel);
+        //tela erro (sem tarefas)
+            JPanel painelErroPrincipal = new JPanel(new BorderLayout(10,10));
+            JPanel pErro = new JPanel(new GridLayout(1,3));
+            JPanel pbotao = new JPanel(new GridLayout(1,5));
 
 
 
-            // manda pro metodo e retorna o dado
-            String textoFinal = "--- Suas Tarefas ---\n\n";
-            String resultado = g.mostraTarefa(textoFinal);
-            texto.setText(resultado);
+            ct.criarLabel("",20,pErro);
+            JLabel titulo = ct.criarLabel("   Não há nenhuma Tarefa!!!",20,pErro); titulo.setForeground(Color.RED);
+            ct.criarLabel("",20,pErro);
+            ct.criarLabel(" ",18,pbotao);
+            ct.criarBotao("Voltar",pbotao).addActionListener(e-> Menu());
+            ct.criarLabel(" ",18,pbotao);
+            ct.criarBotao("Adicionar Tarefa", pbotao).addActionListener(e -> Adicionar());
+            ct.criarLabel(" ",18,pbotao);
+        // add painel erro, sem tarefa
+            painelErroPrincipal.add(pErro, BorderLayout.CENTER);
+            painelErroPrincipal.add(pbotao,  BorderLayout.SOUTH);
 
-            botaoConfirmar.addActionListener(e ->{
-                try{
-                    String velha = campoTarefaVelha.getText();
-                    int intVelha = Integer.parseInt(velha);
+        // tela edita
+            JPanel painelEditaPrincipal = new JPanel(new BorderLayout(10,10));
+            JPanel pEditaPrincipal = new JPanel(new GridLayout(1,2));
+            JPanel pTextarea = new JPanel(new GridLayout(1,1));
+            JPanel pCampos = new JPanel(new GridLayout(6,3));
 
-                    if(intVelha > 0 && intVelha <= g.tarefa.size()) {
+            JTextArea areaTexto = ct.criarCampoArea(pTextarea);
+            areaTexto.setPreferredSize(new Dimension(200,200));
 
-                        String novaTarefa = campoTarefaNova.getText();
-
-                        g.Modifica(intVelha, novaTarefa);
-
-                        //limpa buffer
-                        campoTarefaVelha.setText("");
-                        campoTarefaNova.setText("");
-
-                        //atualiza o textarea e mostra a lista atualiza
-                        String textoFinalNovo = "--- Suas Tarefas ---\n\n";
-                        String resultadoNovo = g.mostraTarefa(textoFinalNovo);
-                        texto.setText(resultadoNovo);
-
-                        tituloTarefaModificada.setText("Tarefa atualizada com sucesso!");
-                        tituloTarefaModificada.setForeground(Color.GREEN);
-                        add(tituloTarefaModificada);
-
-                        revalidate();
-                        repaint();
-                    }else{
-                        System.out.println("Tarefa incorreta!");
-
-                        campoTarefaVelha.setText("");
-                        campoTarefaNova.setText("");
-
-                        //Titulo se nao houver tarefa
-                        tituloTarefaModificada.setText("Tarefa inexistente!");
-                        tituloTarefaModificada.setForeground(Color.RED);
-                        add(tituloTarefaModificada);
-
-                        revalidate();
-                        repaint();
-                    }
-                } catch(Exception erro){
-                    System.out.println("erro editando tarefa!");
-
-                    tituloTarefaModificada.setText("Digite apenas numeros!!");
-                    tituloTarefaModificada.setForeground(Color.RED);
-
-                    campoTarefaVelha.setText("");
-                    campoTarefaNova.setText("");
-
-                    revalidate();
-                    repaint();
-                }
+            //1 linha
+            ct.criarLabel("Qual tarefa deseja editar? ", 18, pCampos);ct.criarLabel(" ",18,pCampos);ct.criarLabel(" ",18,pCampos);
+            //2 linha
+            JTextField campoTarefaVelha = ct.criarCampo(pCampos);ct.criarLabel("",18,pCampos);ct.criarLabel(" ",18,pCampos);
+            //3 linha
+            ct.criarLabel("Digite a nova tarefa:",18,pCampos);ct.criarLabel(" ",18,pCampos);ct.criarLabel(" ",18,pCampos);
+            //4 linha
+            JTextField campoTarefaNova = ct.criarCampo(pCampos);ct.criarLabel(" ",18,pCampos);ct.criarLabel(" ",18,pCampos);
+            //5 linha
+            JLabel titutoAvar = ct.criarLabel(" ",18,pCampos);ct.criarLabel(" ",18,pCampos);ct.criarLabel(" ",18,pCampos);
+            //6 linha
+            ct.criarBotao("Voltar", pCampos).addActionListener(e -> Menu()); ct.criarLabel(" ",18,pCampos);
+            ct.criarBotao("confirmar mudanças", pCampos).addActionListener(e ->{
+                ct.botaoEditar(campoTarefaVelha,campoTarefaNova,titutoAvar, pCampos, areaTexto);
             });
+        //add painel para editar
+            painelEditaPrincipal.add(pEditaPrincipal, BorderLayout.NORTH);
+            painelEditaPrincipal.add(pTextarea, BorderLayout.CENTER);
+            painelEditaPrincipal.add(pCampos, BorderLayout.SOUTH);
 
 
 
-            //add
-            add(texto);
-            add(voltar);
-            add(titulo);
-            add(campoTarefaNova);
-            add(campoTarefaVelha);
-            add(titulo1);
-            add(titulo2);
-            add(botaoConfirmar);
+        // add painel principal
+            painelprincipal.add(pInvisivel,BorderLayout.NORTH);
 
+            ct.ifTemTarefa(painelEditaPrincipal,painelErroPrincipal,painelprincipal);
 
-            revalidate();
+            add(painelprincipal, BorderLayout.CENTER);
+
             repaint();
-
-        }
-        revalidate();
-        repaint();
-        setVisible(true);
+            revalidate();
     }
     public void ConcluirTarefa(){
 

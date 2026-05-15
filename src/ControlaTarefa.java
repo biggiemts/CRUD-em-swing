@@ -55,7 +55,6 @@ public class ControlaTarefa {
 
     public void botaoAdiciona(JTextField campo, JLabel titulo, JPanel painelDestino, JPanel painelMensagem) {
         String texto = campo.getText().trim();
-        System.out.println("\n\nbotao adicionar - controlatarefa - acionado com sucesso");
 
         if (!texto.isEmpty()) {
             g.adiciona(texto);
@@ -67,14 +66,12 @@ public class ControlaTarefa {
 
             painelDestino.repaint();
             painelDestino.revalidate();
-            System.out.println("\n\ntem algo no campo");
         } else {
             campo.setText("");
             titulo.setText("Erro ao adicionar Tarefa!");
             titulo.setForeground(Color.RED);
 
             painelMensagem.setVisible(true);
-            System.out.println("\n\nnao tem nada no campo");
             painelDestino.repaint();
             painelDestino.revalidate();
         }
@@ -86,42 +83,51 @@ public class ControlaTarefa {
 
         int intVelha;
 
-        try {
-            intVelha = Integer.parseInt(textoVelha);
-            System.out.println("try funcionando ");
+        if (!textoNova.isEmpty() && !textoVelha.isEmpty()) {
+            try {
+                intVelha = Integer.parseInt(textoVelha);
 
-            if (!textoNova.isEmpty() && !textoVelha.isEmpty()) {
-                System.out.println("if empty");
+                    if (intVelha > 0 && intVelha <= g.tarefa.size()) {
+                        g.editarTarefa(intVelha, textoNova);
 
-                if (intVelha > 0 && intVelha <= g.tarefa.size()) {
-                    System.out.println(" if botao editar funcionado ");
-                    g.editarTarefa(intVelha, textoNova);
-
-                    titulo.setText("Tarefa Editada com sucesso!");
-                    campoVelha.setText("");
-                    campoNova.setText("");
-                    campoArea.setText(g.mostraTarefa(""));
-
-                }else{
-                    titulo.setText("Erro ao editar Tarefa!");
-                    campoVelha.setText("");
-                    campoNova.setText("");
-                }
-            }else {
-                System.out.println("else empty");
+                        titulo.setText("Tarefa Editada com sucesso!");
+                        titulo.setForeground(Color.GREEN);
+                        campoVelha.setText("");
+                        campoNova.setText("");
+                        campoArea.setText(g.mostraTarefa(""));
+                    }else{
+                        titulo.setText("Tarefa inexistente!!");
+                        titulo.setForeground(Color.RED);
+                        campoVelha.setText("");
+                        campoNova.setText("");
+                    }
+                painelDestino.repaint();
+                painelDestino.revalidate();
+            } catch (Exception e){
+                titulo.setText("Apenas números no 1º Campo!!!");
+                campoVelha.setText("");
+                campoNova.setText("");
+                titulo.setForeground(Color.RED);
+                painelDestino.repaint();
+                painelDestino.revalidate();
             }
-            painelDestino.repaint();
-            painelDestino.revalidate();
-        } catch (Exception e){
-            titulo.setText("Erro ao editar!"); 
-            campoVelha.setText("");
-            campoNova.setText("");
+        }else {
+            titulo.setText("Campos vazios!");
             titulo.setForeground(Color.RED);
-            painelDestino.repaint();
-            painelDestino.revalidate();
-            System.out.println(" catch funcionando");
         }
+    }
+    public void ifTemTarefa(JPanel tela1, JPanel tela2, JPanel painelPrincipal) {
+        if (g.temTarefa()) {
 
+            painelPrincipal.add(tela1, BorderLayout.CENTER);
+            painelPrincipal.repaint();
+            painelPrincipal.revalidate();
+
+        }else{
+            painelPrincipal.add(tela2, BorderLayout.CENTER);
+            painelPrincipal.repaint();
+            painelPrincipal.revalidate();
+        }
     }
 
     public void Botaoeditar() {

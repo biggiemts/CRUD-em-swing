@@ -2,7 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ControlaTarefa {
-    Gerencia g = new Gerencia();
+    Gerencia g;
+    public  ControlaTarefa (Gerencia gerenciaCompartilhada) {
+        this.g = gerenciaCompartilhada;
+    }
 
     public JButton criarBotao(String texto, JPanel painelDestino) {
         JButton botao = new JButton(texto);

@@ -27,15 +27,12 @@ public class Gerencia {
     public void editarTarefa(int tarefaVelha, String tarefaNova){
         Tarefa tarefaAtualizada = new Tarefa(tarefaNova);
         tarefa.set(tarefaVelha - 1, tarefaAtualizada);
-        System.out.println("Tarefa atualizada com sucesso, metodo ");
     }
+    public void concluirTarefa(int bah, int tarefa){
+        int i = bah - 1;
+        Tarefa tarefaConcluida = tarefa.get(i);
 
 
-    //modifica
-    public void Modifica (int indiceTarefa, String tarefaNova){
-        Tarefa atualizarTarefa = new Tarefa(tarefaNova);
-        tarefa.set(indiceTarefa -1, atualizarTarefa);
-        System.out.println("Tarefa atualizada com sucesso");
     }
 
     //conclui

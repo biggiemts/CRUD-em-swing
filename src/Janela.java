@@ -131,10 +131,8 @@ public class Janela extends JFrame{
     public void Editar(){
             getContentPane().removeAll();
 
-
             JPanel painelprincipal = new JPanel( new BorderLayout(10,10));
             JPanel pInvisivel =  new JPanel(new FlowLayout());ct.criarLabel(" ",18,pInvisivel);
-
 
         // tela edita
             JPanel painelEditaPrincipal = new JPanel(new BorderLayout(10,10));
@@ -168,9 +166,7 @@ public class Janela extends JFrame{
             //6 linha
             ct.criarBotao("Voltar", pCampos).addActionListener(e -> Menu());
             ct.criarLabel(" ",18,pCampos);
-            ct.criarBotao("confirmar mudanças", pCampos).addActionListener(e ->{
-                ct.botaoEditar(campoTarefaVelha,campoTarefaNova,titutoAvar, pCampos, areaTexto);
-            });
+            ct.criarBotao("confirmar mudanças", pCampos).addActionListener(e ->ct.botaoEditar(campoTarefaVelha,campoTarefaNova,titutoAvar, pCampos, areaTexto));
         //add painel para editar
             painelEditaPrincipal.add(pEditaPrincipal, BorderLayout.NORTH);
             painelEditaPrincipal.add(pTextarea, BorderLayout.CENTER);
@@ -179,10 +175,8 @@ public class Janela extends JFrame{
             painelprincipal.add(pInvisivel,BorderLayout.NORTH);
             if (g.temTarefa()){
                 painelprincipal.add(painelEditaPrincipal,BorderLayout.CENTER);
-
             }else{
                 painelprincipal.add(TelaErro());
-
             }
             add(painelprincipal, BorderLayout.CENTER);
         repaint();
@@ -192,10 +186,45 @@ public class Janela extends JFrame{
             getContentPane().removeAll();
 
             JPanel painelPrincipal = new JPanel(new BorderLayout(10,10));
+            JPanel pInvisivel =  new JPanel(new FlowLayout());
+            ct.criarLabel(" ",18,pInvisivel);
 
-        // painel erro
-            JPanel painelErroPrincipal = new JPanel(new GridLayout(1,1));
+        // painel
+            JPanel pPrincipal = new JPanel(new BorderLayout(10,10));
+            JPanel pTexto = new JPanel(new GridLayout(1,1));
+            JPanel pCampos = new JPanel(new GridLayout(3,2));
+            JPanel pBotoes = new JPanel(new GridLayout(1,3));
 
+        //campos e botao
+            JTextArea areaMostraTarefa = ct.criarCampoArea(pTexto);
+            areaMostraTarefa.setPreferredSize(new Dimension(300,300));
+
+            ct.criarLabel("Qual tarefa deseja concluir ou reabrir? ", 18, pCampos);
+            ct.criarLabel(" ",18,pCampos);
+            JTextField campoEntrada = ct.criarCampo(pCampos);
+            ct.criarLabel(" ",18,pCampos);
+            JLabel tituloAvar = ct.criarLabel("",18,pCampos);
+            ct.criarLabel(" ",18,pCampos);
+
+            ct.criarBotao("Voltar", pBotoes).addActionListener(e -> Menu());
+            ct.criarLabel(" ",18,pBotoes);
+            ct.criarBotao("confirmar mudanças", pBotoes).addActionListener( e -> ct.botaoConcluir(areaMostraTarefa, tituloAvar, campoEntrada, pPrincipal));
+
+        //add painel
+            pPrincipal.add(pTexto, BorderLayout.NORTH);
+            pPrincipal.add(pCampos, BorderLayout.CENTER);
+            pPrincipal.add(pBotoes, BorderLayout.SOUTH);
+        //add
+            painelPrincipal.add(pInvisivel,BorderLayout.NORTH);
+            if (g.temTarefa()){
+                painelPrincipal.add(pPrincipal, BorderLayout.CENTER);
+            }else{
+                    painelPrincipal.add(TelaErro());
+            }
+            add(painelPrincipal, BorderLayout.CENTER);
+
+            revalidate();
+            repaint();
     }
     public void Deletar(){
 

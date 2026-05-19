@@ -64,20 +64,14 @@ public class ControlaTarefa {
             campo.setText("");
             titulo.setText("Tarefa Adicionada com sucesso!");
             titulo.setForeground(Color.GREEN);
-            painelMensagem.setVisible(true);
-
-
-            painelDestino.repaint();
-            painelDestino.revalidate();
         } else {
             campo.setText("");
             titulo.setText("Erro ao adicionar Tarefa!");
             titulo.setForeground(Color.RED);
-
-            painelMensagem.setVisible(true);
-            painelDestino.repaint();
-            painelDestino.revalidate();
         }
+        painelMensagem.setVisible(true);
+        painelDestino.repaint();
+        painelDestino.revalidate();
     }
 
     public void botaoEditar (JTextField campoVelha, JTextField campoNova, JLabel titulo, JPanel painelDestino, JTextArea campoArea) {
@@ -119,6 +113,8 @@ public class ControlaTarefa {
             titulo.setForeground(Color.RED);
         }
     }
+
+    /**
     public void ifTemTarefa(JPanel tela1, JPanel tela2, JPanel painelPrincipal) {
         if (g.temTarefa()) {
 
@@ -132,8 +128,45 @@ public class ControlaTarefa {
             painelPrincipal.revalidate();
         }
     }
+    **/
 
-    public void Botaoeditar() {
+    public void botaoConcluir(JTextArea tArea, JLabel titulo, JTextField campo, JPanel painelDestino) {
+        String  texto = campo.getText().trim();
 
+        int intTextoConcluido;
+        try{
+            intTextoConcluido = Integer.parseInt(texto);
+
+            if (intTextoConcluido > 0 && intTextoConcluido <= g.tarefa.size()) {
+
+                int indice = intTextoConcluido - 1;
+                Tarefa vTemporaria = g.tarefa.get(indice);
+
+                //Toggle, alternador para conseguir alternar entre true e false
+                vTemporaria.setConcluido(!vTemporaria.getConcluido());
+
+                if (vTemporaria.getConcluido()) {
+                    titulo.setText("Tarefa Concluida com sucesso!");
+                    titulo.setForeground(Color.GREEN);
+                }else{
+                    titulo.setText("Tarefa reaberta com sucesso!");
+                    titulo.setForeground(Color.BLUE);
+                }
+                campo.setText("");
+                tArea.setText(g.mostraTarefa(""));
+            }else {
+                campo.setText("");
+                tArea.setText(g.mostraTarefa(""));
+                titulo.setText("Tarefa inexistente!");
+                titulo.setForeground(Color.RED);
+            }
+            painelDestino.repaint();
+            painelDestino.revalidate();
+
+        }catch (Exception e){
+            titulo.setText("Digite apenas numeros!");
+            campo.setText("");
+
+        }
     }
 }

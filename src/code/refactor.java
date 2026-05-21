@@ -146,5 +146,11 @@
         repaint();
         setVisible(true);
     }
+
+
+
+
+    int resposta = JOptionPane.showConfirmDialog(painelPrincipal,"Deseja realmente excluir está Tarefa?",
+                        "ATENÇÃO!!!",JOptionPane.YES_NO_OPTION);
     *
  */

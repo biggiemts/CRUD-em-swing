@@ -9,7 +9,7 @@ public class Janela extends JFrame{
     public Janela()  {
         setTitle("Lista de Tarefas");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000,700);
+        setSize(1000,700);  
         setLocationRelativeTo(null);
         setResizable(false);
 
@@ -227,8 +227,55 @@ public class Janela extends JFrame{
             repaint();
     }
     public void Deletar(){
+            getContentPane().removeAll();
 
+            JPanel painelPrincipal = new JPanel(new BorderLayout(10,10));
+            JPanel pInvisivel =  new JPanel(new FlowLayout());
+            ct.criarLabel(" ",18,pInvisivel);
+
+        //paineis
+            JPanel pPrincipalGrid = new JPanel(new BorderLayout(10,10));
+            JPanel pArea = new JPanel(new GridLayout(1,1));
+            JPanel pCampos = new JPanel(new GridLayout(3,2));
+            JPanel pBotoes = new JPanel(new GridLayout(1,3));
+
+
+        //
+            JTextArea areaTexto = ct.criarCampoArea(pArea);
+            areaTexto.setPreferredSize(new Dimension(300,300));
+
+        //painel pcampos
+            //linha 1
+            ct.criarLabel("Qual tarefa deseja excluir?",18,pCampos);
+            ct.criarLabel(" ",18,pCampos);
+            //linha 2
+            JTextField campo = ct.criarCampo(pCampos);
+            ct.criarLabel(" ",18,pCampos);
+            //linha 3
+            JLabel tituloAvar = ct.criarLabel("",18,pCampos);
+            ct.criarLabel(" ",18,pCampos);
+        //painel botoes
+            ct.criarBotao("Voltar", pBotoes).addActionListener(e -> Menu());
+            ct.criarLabel(" ",18,pBotoes);
+            ct.criarBotao("confirmar mudanças", pBotoes).addActionListener( e ->ct.botaoDeletar(areaTexto, campo, tituloAvar, painelPrincipal));
+
+        //add
+            pPrincipalGrid.add(pArea, BorderLayout.NORTH);
+            pPrincipalGrid.add(pCampos, BorderLayout.CENTER);
+            pPrincipalGrid.add(pBotoes, BorderLayout.SOUTH);
+
+            painelPrincipal.add(pInvisivel,BorderLayout.NORTH);
+            if (g.temTarefa()){
+                painelPrincipal.add(pPrincipalGrid, BorderLayout.CENTER);
+            }else{
+                painelPrincipal.add(TelaErro());
+            }
+            add(painelPrincipal, BorderLayout.CENTER);
+
+            repaint();
+            revalidate();
     }
+
     public void Sair(){
         dispose();
     }

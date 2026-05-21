@@ -13,7 +13,6 @@ public class ControlaTarefa {
         botao.setFocusPainted(false);
         botao.setFont(new Font("Arial", Font.BOLD, 18));
 
-        // em ves de criar na janela ele cria no painel e manda pra la
         painelDestino.add(botao);
         return botao;
     }
@@ -34,7 +33,6 @@ public class ControlaTarefa {
 
     public JTextArea criarCampoArea(JPanel painelDestino) {
         String texto = "";
-
         texto = g.mostraTarefa(texto);
 
         JTextArea tArea = new JTextArea();
@@ -66,7 +64,7 @@ public class ControlaTarefa {
             titulo.setForeground(Color.GREEN);
         } else {
             campo.setText("");
-            titulo.setText("Erro ao adicionar Tarefa!");
+            titulo.setText("Erro!! Campo vazio!");
             titulo.setForeground(Color.RED);
         }
         painelMensagem.setVisible(true);
@@ -101,7 +99,7 @@ public class ControlaTarefa {
                 painelDestino.repaint();
                 painelDestino.revalidate();
             } catch (Exception e){
-                titulo.setText("Apenas números no 1º Campo!!!");
+                titulo.setText("Digite apenas numeros!!!");
                 campoVelha.setText("");
                 campoNova.setText("");
                 titulo.setForeground(Color.RED);
@@ -114,59 +112,87 @@ public class ControlaTarefa {
         }
     }
 
-    /**
-    public void ifTemTarefa(JPanel tela1, JPanel tela2, JPanel painelPrincipal) {
-        if (g.temTarefa()) {
-
-            painelPrincipal.add(tela1, BorderLayout.CENTER);
-            painelPrincipal.repaint();
-            painelPrincipal.revalidate();
-
-        }else{
-            painelPrincipal.add(tela2, BorderLayout.CENTER);
-            painelPrincipal.repaint();
-            painelPrincipal.revalidate();
-        }
-    }
-    **/
-
     public void botaoConcluir(JTextArea tArea, JLabel titulo, JTextField campo, JPanel painelDestino) {
         String  texto = campo.getText().trim();
 
         int intTextoConcluido;
-        try{
-            intTextoConcluido = Integer.parseInt(texto);
+        if (!texto.isEmpty()) {
+            try{
+                intTextoConcluido = Integer.parseInt(texto);
 
-            if (intTextoConcluido > 0 && intTextoConcluido <= g.tarefa.size()) {
+                if (intTextoConcluido > 0 && intTextoConcluido <= g.tarefa.size()) {
 
-                int indice = intTextoConcluido - 1;
-                Tarefa vTemporaria = g.tarefa.get(indice);
+                    //passando o valor Objeto para booleano
+                    boolean statusTarefa = g.alternaStatusTarefa(intTextoConcluido);
 
-                //Toggle, alternador para conseguir alternar entre true e false
-                vTemporaria.setConcluido(!vTemporaria.getConcluido());
-
-                if (vTemporaria.getConcluido()) {
-                    titulo.setText("Tarefa Concluida com sucesso!");
-                    titulo.setForeground(Color.GREEN);
-                }else{
-                    titulo.setText("Tarefa reaberta com sucesso!");
-                    titulo.setForeground(Color.BLUE);
+                    if (statusTarefa) {
+                        titulo.setText("Tarefa Concluida com sucesso!");
+                        titulo.setForeground(Color.GREEN);
+                    } else {
+                        titulo.setText("Tarefa reaberta com sucesso!");
+                        titulo.setForeground(Color.BLUE);
+                    }
+                    campo.setText("");
+                    tArea.setText(g.mostraTarefa(""));
+                } else {
+                    campo.setText("");
+                    tArea.setText(g.mostraTarefa(""));
+                    titulo.setText("Tarefa inexistente!");
+                    titulo.setForeground(Color.RED);
                 }
-                campo.setText("");
-                tArea.setText(g.mostraTarefa(""));
-            }else {
-                campo.setText("");
-                tArea.setText(g.mostraTarefa(""));
-                titulo.setText("Tarefa inexistente!");
+
+                painelDestino.repaint();
+                painelDestino.revalidate();
+
+            }catch (Exception e){
+                titulo.setText("Digite apenas numeros!!!");
                 titulo.setForeground(Color.RED);
+                campo.setText("");
+
             }
-            painelDestino.repaint();
-            painelDestino.revalidate();
-
-        }catch (Exception e){
-            titulo.setText("Digite apenas numeros!");
+        } else{
             campo.setText("");
+            tArea.setText(g.mostraTarefa(""));
+            titulo.setText("Campos vazios!");
+            titulo.setForeground(Color.RED);
+        }
+    }
+    public void botaoDeletar(JTextArea areaTexto, JTextField campo, JLabel titulo, JPanel painelDestino) {
+        String texto = campo.getText().trim();
+        int  intTextoDeleta;
 
+        if(!texto.isEmpty()) {
+            try{
+                intTextoDeleta = Integer.parseInt(texto);
+                if (intTextoDeleta > 0 && intTextoDeleta <= g.tarefa.size()) {
+                    campo.setText("");
+                    int resposta = JOptionPane.showConfirmDialog(painelDestino,"Deseja realmente excluir está Tarefa?",
+                            "ATENÇÃO!!!",JOptionPane.YES_NO_OPTION);
+                    if  (resposta == JOptionPane.YES_OPTION) {
+
+                        g.deletar(intTextoDeleta);
+
+                        areaTexto.setText(g.mostraTarefa(""));
+                        titulo.setText("Tarefa excluida com sucesso!");
+                        titulo.setForeground(Color.GREEN);
+                    }else{
+                        titulo.setText("Exclusão Cancelada!");
+                        titulo.setForeground(Color.BLUE);
+                    }
+                }else{
+                    titulo.setText("Tarefa inexistente!");
+                    titulo.setForeground(Color.RED);
+                    campo.setText("");
+                }
+
+            }catch (Exception e){
+                titulo.setText("digite apenas numeros!!");
+                titulo.setForeground(Color.RED);
+                campo.setText("");
+            }
+        }else{
+            titulo.setText("Campos vazios!");
+            titulo.setForeground(Color.RED);
         }
     }
 }

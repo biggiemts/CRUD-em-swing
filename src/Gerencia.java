@@ -4,17 +4,18 @@ public class Gerencia {
 
     ArrayList<Tarefa> tarefa = new ArrayList<>();
 
-    // verificador se a tarefa
-    public boolean temTarefa(){return !tarefa.isEmpty();}
+    // verificador se ha tarefa
+    public boolean temTarefa(){
+        return !tarefa.isEmpty();
+    }
 
     //adiciona
     public void adiciona(String nome){
         Tarefa t = new Tarefa(nome);
         tarefa.add(t);
-        System.out.println("Tarefa adicionada com sucesso");
     }
-    //mostra
 
+    //mostra
     public String mostraTarefa(String textoFinal){
         for (int i = 0; i<tarefa.size(); i++){
             Tarefa t = tarefa.get(i);
@@ -24,26 +25,26 @@ public class Gerencia {
         return textoFinal;
     }
 
+    //edita
     public void editarTarefa(int tarefaVelha, String tarefaNova){
         Tarefa tarefaAtualizada = new Tarefa(tarefaNova);
         tarefa.set(tarefaVelha - 1, tarefaAtualizada);
-        System.out.println("Tarefa atualizada com sucesso, metodo ");
-    }
-
-
-    //modifica
-    public void Modifica (int indiceTarefa, String tarefaNova){
-        Tarefa atualizarTarefa = new Tarefa(tarefaNova);
-        tarefa.set(indiceTarefa -1, atualizarTarefa);
-        System.out.println("Tarefa atualizada com sucesso");
     }
 
     //conclui
+    public boolean alternaStatusTarefa(int posicaoUsuario){
+        int posicaoComputador = posicaoUsuario - 1;
+
+        Tarefa tarefaConcluida = tarefa.get(posicaoComputador);
+        tarefaConcluida.setConcluido(!tarefaConcluida.getConcluido());
+
+        //retornando getConcluido que é booleno
+        return tarefaConcluida.getConcluido();
+    }
 
     //deleta
-
-
-    //encerra o porgrama
-
-
+    public void deletar(int posicaoUsuario){
+        posicaoUsuario = posicaoUsuario - 1;
+        tarefa.remove(posicaoUsuario);
+    }
 }

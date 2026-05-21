@@ -1,6 +1,6 @@
 
 public class Tarefa {
-    private String nome;
+    private final String nome;
     private Boolean concluido;
 
     public Tarefa(String nome){

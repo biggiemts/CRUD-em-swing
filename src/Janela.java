@@ -2,16 +2,42 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Janela extends JFrame{
-    ControlaTarefa ct = new ControlaTarefa();
+
+    Gerencia g = new Gerencia();
+    ControlaTarefa ct = new ControlaTarefa(g);
 
     public Janela()  {
         setTitle("Lista de Tarefas");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000,700);
+        setSize(1000,700);  
         setLocationRelativeTo(null);
         setResizable(false);
 
         Menu();
+    }
+    public JPanel TelaErro(){
+            getContentPane().removeAll();
+        //tela erro (sem tarefas)
+            JPanel painelErroPrincipal = new JPanel(new BorderLayout(10,10));
+            JPanel pErro = new JPanel(new GridLayout(1,3));
+            JPanel pbotao = new JPanel(new GridLayout(1,5));
+
+            ct.criarLabel("",20,pErro);
+            JLabel titulo = ct.criarLabel("   Não há nenhuma Tarefa!!!",20,pErro); titulo.setForeground(Color.RED);
+            ct.criarLabel("",20,pErro);
+            ct.criarLabel(" ",18,pbotao);
+            ct.criarBotao("Voltar",pbotao).addActionListener(e-> Menu());
+            ct.criarLabel(" ",18,pbotao);
+            ct.criarBotao("Adicionar Tarefa", pbotao).addActionListener(e -> Adicionar());
+            ct.criarLabel(" ",18,pbotao);
+        // add painel erro, sem tarefa
+            painelErroPrincipal.add(pErro, BorderLayout.CENTER);
+            painelErroPrincipal.add(pbotao,  BorderLayout.SOUTH);
+
+            revalidate();
+            repaint();
+
+            return painelErroPrincipal;
     }
     public void Menu(){
         getContentPane().removeAll();
@@ -87,7 +113,6 @@ public class Janela extends JFrame{
         JPanel pBotoes = new JPanel();
         JTextArea areaTexto = ct.criarCampoArea(pTArea);
 
-
         pTArea.setLayout(new GridLayout(1,1));
         pBotoes.setLayout(new GridLayout(1,3));
         areaTexto.setPreferredSize(new Dimension(400,400));
@@ -96,11 +121,9 @@ public class Janela extends JFrame{
         ct.criarLabel(" ",18,pBotoes);
         ct.criarBotao("adicionar Tarefa", pBotoes).addActionListener(e -> Adicionar());
 
-
         painelPrincipal.add(pTArea, BorderLayout.CENTER);
         painelPrincipal.add(pBotoes, BorderLayout.SOUTH);
         add(painelPrincipal);
-
 
         repaint();
         revalidate();
@@ -110,24 +133,6 @@ public class Janela extends JFrame{
 
             JPanel painelprincipal = new JPanel( new BorderLayout(10,10));
             JPanel pInvisivel =  new JPanel(new FlowLayout());ct.criarLabel(" ",18,pInvisivel);
-        //tela erro (sem tarefas)
-            JPanel painelErroPrincipal = new JPanel(new BorderLayout(10,10));
-            JPanel pErro = new JPanel(new GridLayout(1,3));
-            JPanel pbotao = new JPanel(new GridLayout(1,5));
-
-
-
-            ct.criarLabel("",20,pErro);
-            JLabel titulo = ct.criarLabel("   Não há nenhuma Tarefa!!!",20,pErro); titulo.setForeground(Color.RED);
-            ct.criarLabel("",20,pErro);
-            ct.criarLabel(" ",18,pbotao);
-            ct.criarBotao("Voltar",pbotao).addActionListener(e-> Menu());
-            ct.criarLabel(" ",18,pbotao);
-            ct.criarBotao("Adicionar Tarefa", pbotao).addActionListener(e -> Adicionar());
-            ct.criarLabel(" ",18,pbotao);
-        // add painel erro, sem tarefa
-            painelErroPrincipal.add(pErro, BorderLayout.CENTER);
-            painelErroPrincipal.add(pbotao,  BorderLayout.SOUTH);
 
         // tela edita
             JPanel painelEditaPrincipal = new JPanel(new BorderLayout(10,10));
@@ -139,43 +144,138 @@ public class Janela extends JFrame{
             areaTexto.setPreferredSize(new Dimension(200,200));
 
             //1 linha
-            ct.criarLabel("Qual tarefa deseja editar? ", 18, pCampos);ct.criarLabel(" ",18,pCampos);ct.criarLabel(" ",18,pCampos);
+            ct.criarLabel("Qual tarefa deseja editar? ", 18, pCampos);
+            ct.criarLabel(" ",18,pCampos);
+            ct.criarLabel(" ",18,pCampos);
             //2 linha
-            JTextField campoTarefaVelha = ct.criarCampo(pCampos);ct.criarLabel("",18,pCampos);ct.criarLabel(" ",18,pCampos);
+            JTextField campoTarefaVelha = ct.criarCampo(pCampos);
+            ct.criarLabel("",18,pCampos);
+            ct.criarLabel(" ",18,pCampos);
             //3 linha
-            ct.criarLabel("Digite a nova tarefa:",18,pCampos);ct.criarLabel(" ",18,pCampos);ct.criarLabel(" ",18,pCampos);
+            ct.criarLabel("Digite a nova tarefa:",18,pCampos);
+            ct.criarLabel(" ",18,pCampos);
+            ct.criarLabel(" ",18,pCampos);
             //4 linha
-            JTextField campoTarefaNova = ct.criarCampo(pCampos);ct.criarLabel(" ",18,pCampos);ct.criarLabel(" ",18,pCampos);
+            JTextField campoTarefaNova = ct.criarCampo(pCampos);
+            ct.criarLabel(" ",18,pCampos);
+            ct.criarLabel(" ",18,pCampos);
             //5 linha
-            JLabel titutoAvar = ct.criarLabel(" ",18,pCampos);ct.criarLabel(" ",18,pCampos);ct.criarLabel(" ",18,pCampos);
+            JLabel titutoAvar = ct.criarLabel(" ",18,pCampos);
+            ct.criarLabel(" ",18,pCampos);
+            ct.criarLabel(" ",18,pCampos);
             //6 linha
-            ct.criarBotao("Voltar", pCampos).addActionListener(e -> Menu()); ct.criarLabel(" ",18,pCampos);
-            ct.criarBotao("confirmar mudanças", pCampos).addActionListener(e ->{
-                ct.botaoEditar(campoTarefaVelha,campoTarefaNova,titutoAvar, pCampos, areaTexto);
-            });
+            ct.criarBotao("Voltar", pCampos).addActionListener(e -> Menu());
+            ct.criarLabel(" ",18,pCampos);
+            ct.criarBotao("confirmar mudanças", pCampos).addActionListener(e ->ct.botaoEditar(campoTarefaVelha,campoTarefaNova,titutoAvar, pCampos, areaTexto));
         //add painel para editar
             painelEditaPrincipal.add(pEditaPrincipal, BorderLayout.NORTH);
             painelEditaPrincipal.add(pTextarea, BorderLayout.CENTER);
             painelEditaPrincipal.add(pCampos, BorderLayout.SOUTH);
-
-
-
         // add painel principal
             painelprincipal.add(pInvisivel,BorderLayout.NORTH);
-
-            ct.ifTemTarefa(painelEditaPrincipal,painelErroPrincipal,painelprincipal);
-
+            if (g.temTarefa()){
+                painelprincipal.add(painelEditaPrincipal,BorderLayout.CENTER);
+            }else{
+                painelprincipal.add(TelaErro());
+            }
             add(painelprincipal, BorderLayout.CENTER);
+        repaint();
+        revalidate();
+    }
+    public void ConcluirTarefa(){
+            getContentPane().removeAll();
+
+            JPanel painelPrincipal = new JPanel(new BorderLayout(10,10));
+            JPanel pInvisivel =  new JPanel(new FlowLayout());
+            ct.criarLabel(" ",18,pInvisivel);
+
+        // painel
+            JPanel pPrincipal = new JPanel(new BorderLayout(10,10));
+            JPanel pTexto = new JPanel(new GridLayout(1,1));
+            JPanel pCampos = new JPanel(new GridLayout(3,2));
+            JPanel pBotoes = new JPanel(new GridLayout(1,3));
+
+        //campos e botao
+            JTextArea areaMostraTarefa = ct.criarCampoArea(pTexto);
+            areaMostraTarefa.setPreferredSize(new Dimension(300,300));
+
+            ct.criarLabel("Qual tarefa deseja concluir ou reabrir? ", 18, pCampos);
+            ct.criarLabel(" ",18,pCampos);
+            JTextField campoEntrada = ct.criarCampo(pCampos);
+            ct.criarLabel(" ",18,pCampos);
+            JLabel tituloAvar = ct.criarLabel("",18,pCampos);
+            ct.criarLabel(" ",18,pCampos);
+
+            ct.criarBotao("Voltar", pBotoes).addActionListener(e -> Menu());
+            ct.criarLabel(" ",18,pBotoes);
+            ct.criarBotao("confirmar mudanças", pBotoes).addActionListener( e -> ct.botaoConcluir(areaMostraTarefa, tituloAvar, campoEntrada, pPrincipal));
+
+        //add painel
+            pPrincipal.add(pTexto, BorderLayout.NORTH);
+            pPrincipal.add(pCampos, BorderLayout.CENTER);
+            pPrincipal.add(pBotoes, BorderLayout.SOUTH);
+        //add
+            painelPrincipal.add(pInvisivel,BorderLayout.NORTH);
+            if (g.temTarefa()){
+                painelPrincipal.add(pPrincipal, BorderLayout.CENTER);
+            }else{
+                    painelPrincipal.add(TelaErro());
+            }
+            add(painelPrincipal, BorderLayout.CENTER);
+
+            revalidate();
+            repaint();
+    }
+    public void Deletar(){
+            getContentPane().removeAll();
+
+            JPanel painelPrincipal = new JPanel(new BorderLayout(10,10));
+            JPanel pInvisivel =  new JPanel(new FlowLayout());
+            ct.criarLabel(" ",18,pInvisivel);
+
+        //paineis
+            JPanel pPrincipalGrid = new JPanel(new BorderLayout(10,10));
+            JPanel pArea = new JPanel(new GridLayout(1,1));
+            JPanel pCampos = new JPanel(new GridLayout(3,2));
+            JPanel pBotoes = new JPanel(new GridLayout(1,3));
+
+
+        //
+            JTextArea areaTexto = ct.criarCampoArea(pArea);
+            areaTexto.setPreferredSize(new Dimension(300,300));
+
+        //painel pcampos
+            //linha 1
+            ct.criarLabel("Qual tarefa deseja excluir?",18,pCampos);
+            ct.criarLabel(" ",18,pCampos);
+            //linha 2
+            JTextField campo = ct.criarCampo(pCampos);
+            ct.criarLabel(" ",18,pCampos);
+            //linha 3
+            JLabel tituloAvar = ct.criarLabel("",18,pCampos);
+            ct.criarLabel(" ",18,pCampos);
+        //painel botoes
+            ct.criarBotao("Voltar", pBotoes).addActionListener(e -> Menu());
+            ct.criarLabel(" ",18,pBotoes);
+            ct.criarBotao("confirmar mudanças", pBotoes).addActionListener( e ->ct.botaoDeletar(areaTexto, campo, tituloAvar, painelPrincipal));
+
+        //add
+            pPrincipalGrid.add(pArea, BorderLayout.NORTH);
+            pPrincipalGrid.add(pCampos, BorderLayout.CENTER);
+            pPrincipalGrid.add(pBotoes, BorderLayout.SOUTH);
+
+            painelPrincipal.add(pInvisivel,BorderLayout.NORTH);
+            if (g.temTarefa()){
+                painelPrincipal.add(pPrincipalGrid, BorderLayout.CENTER);
+            }else{
+                painelPrincipal.add(TelaErro());
+            }
+            add(painelPrincipal, BorderLayout.CENTER);
 
             repaint();
             revalidate();
     }
-    public void ConcluirTarefa(){
 
-    }
-    public void Deletar(){
-
-    }
     public void Sair(){
         dispose();
     }
